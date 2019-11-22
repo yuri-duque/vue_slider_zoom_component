@@ -77,7 +77,6 @@ export default {
   methods: {
     changeIndex(actions) {
       if (actions.action === "proximo") {
-        debugger;
         if (this.currentIndex < this.limitIndex) {
           this.currentIndex++;
         }
@@ -120,8 +119,7 @@ export default {
 
         var margin = this.marginDrag < 0 ? -this.marginDrag : this.marginDrag;
         var index = parseInt(margin / this.singleWidth);
-
-        debugger;
+        
         //pega a porcentagem de quanto a outra imagem foi vista
         if ((margin % this.singleWidth) / (this.singleWidth / 100) > 50) {
           index++;
