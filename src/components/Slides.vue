@@ -1,13 +1,10 @@
 <template>
   <div ref="slides" class="slides">
     <div
+      ref="slides-inner"
       class="slides-inner selector"
       :class="{'transition' : position == 0}"
       :style="{width: `${innerWidth}px`, marginLeft: `-${slidesInnerMarginLeft + marginDrag}px`}"
-      @mousedown="dragStart($event)"
-      @mousemove="arrastador($event)"
-      @mouseleave="dragEnd()"
-      @mouseup="dragEnd()"
     >
       <div class="slide" :key="index" v-for="(item, index) in images">
         <Slide :style="{width: singleWidth + 'px'}" :slide="item" />
@@ -63,10 +60,21 @@ export default {
   },
 
   mounted() {
-    this.singleWidth = this.$refs.slides.clientWidth / this.itensPerSlide;
-    this.innerWidth = this.singleWidth * this.images.length;
-
+    this.setSize();
     this.setLimitIndex();
+
+    window.addEventListener("resize", this.setSize);
+    if ("ontouchstart" in window) {
+      this.$el.addEventListener("touchstart", this.dragStart);
+      this.$el.addEventListener("touchmove", this.arrastador);
+      this.$el.addEventListener("touchend", this.dragEnd);
+      this.$el.addEventListener("touchleave", this.dragEnd);
+    } else {
+      this.$el.addEventListener("mousedown", this.dragStart);
+      this.$el.addEventListener("mousemove", this.arrastador);
+      this.$el.addEventListener("mouseleave", this.dragEnd);
+      this.$el.addEventListener("mouseup", this.dragEnd);
+    }
   },
 
   watch: {
@@ -76,18 +84,23 @@ export default {
   },
 
   methods: {
+    setSize() {
+      this.singleWidth = this.$refs.slides.clientWidth / this.itensPerSlide;
+      this.innerWidth = this.singleWidth * this.images.length;
+    },
+
     changeIndex(actions) {
       const actionsChange = {
         Proximo: () => {
           if (this.currentIndex < this.limitIndex) this.currentIndex++;
         },
-        Anterior: () =>  {
+        Anterior: () => {
           if (this.currentIndex > 0) this.currentIndex--;
         },
-        Paginacao: () =>  {
+        Paginacao: () => {
           this.currentIndex = actions.index;
         },
-        SetIndex: () =>  {
+        SetIndex: () => {
           var soma = this.currentIndex + actions.index;
 
           if (soma > this.limitIndex) {
@@ -113,13 +126,13 @@ export default {
 
     arrastador(e) {
       if (this.position) {
-        var dif = this.position - e.pageX;
+        var dif = this.position - this.getPosition(e);
         this.marginDrag = dif;
       }
     },
 
     dragStart(e) {
-      this.position = e.pageX;
+      this.position = this.getPosition(e);
     },
 
     dragEnd() {
@@ -142,6 +155,14 @@ export default {
 
         this.marginDrag = 0;
       }
+    }, 
+
+    getPosition(e){
+      if ("ontouchstart" in window) {
+        return e.touches[0].clientX;
+      }else{
+        return e.pageX;
+      }
     }
   }
 };
@@ -160,8 +181,8 @@ export default {
   display: flex;
 }
 
-.transition{
-    transition: 0.5s
+.transition {
+  transition: 0.5s;
 }
 
 .selector {

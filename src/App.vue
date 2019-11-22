@@ -2,7 +2,7 @@
   <div id="app">
     <input type="text" v-model="pesquisa" style="margin-bottom: 15px;"/>
     <button @click="getImages(pesquisa)">Pesquisar</button>
-    <Slides :images="images" :itensPerSlide="6" />
+    <Slides :images="images" :itensPerSlide="4" />
   </div>
 </template>
 
@@ -30,7 +30,6 @@ export default {
 
   methods: {
     getImages: async term => {
-      debugger;
       const response = await unsplash.get("search/photos", {
         params: { query: term }
       });
