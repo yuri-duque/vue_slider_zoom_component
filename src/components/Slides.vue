@@ -2,6 +2,7 @@
   <div ref="slides" class="slides">
     <div
       class="slides-inner selector"
+      :class="{'transition' : position == 0}"
       :style="{width: `${innerWidth}px`, marginLeft: `-${slidesInnerMarginLeft + marginDrag}px`}"
       @mousedown="dragStart($event)"
       @mousemove="arrastador($event)"
@@ -86,7 +87,6 @@ export default {
         Paginacao: () =>  {
           this.currentIndex = actions.index;
         },
-
         SetIndex: () =>  {
           var soma = this.currentIndex + actions.index;
 
@@ -159,7 +159,10 @@ export default {
 
 .slides-inner {
   display: flex;
-  transition: 0.3s;
+}
+
+.transition{
+    transition: 0.5s
 }
 
 .selector {
