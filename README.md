@@ -1,4 +1,6 @@
-# adsad
+# vue_slider_zoom
+
+view demo: https://duckcodesliderzoom.netlify.com/
 
 ## Project setup
 ```
