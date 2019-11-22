@@ -150,7 +150,6 @@ export default {
 <style scoped>
 .slides {
   overflow: hidden;
-  background-color: black;
 }
 
 .slide {
