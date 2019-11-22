@@ -24,15 +24,15 @@ export default {
 
   methods: {
     goToProximo() {
-      this.$emit("changeIndex", { action: "proximo" });
+      this.$emit("changeIndex", { action: "Proximo" });
     },
 
     goToAnterior() {
-      this.$emit("changeIndex", { action: "anterior" });
+      this.$emit("changeIndex", { action: "Anterior" });
     },
 
     setIndex(index) {
-      this.$emit("changeIndex", { action: "setIndex", index: index });
+      this.$emit("changeIndex", { action: "Paginacao", index: index });
     },
 
     buttonValide(index) {

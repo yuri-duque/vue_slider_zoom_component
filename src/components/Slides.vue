@@ -76,25 +76,34 @@ export default {
 
   methods: {
     changeIndex(actions) {
-      if (actions.action === "proximo") {
-        if (this.currentIndex < this.limitIndex) {
-          this.currentIndex++;
-        }
-      } else if (actions.action === "anterior") {
-        if (this.currentIndex > 0) {
-          this.currentIndex--;
-        }
-      } else if (actions.action === "setIndex") {
-        var soma = this.currentIndex + actions.index;
+      const actionsChange = {
+        Proximo: () => {
+          if (this.currentIndex < this.limitIndex) this.currentIndex++;
+        },
+        Anterior: () =>  {
+          if (this.currentIndex > 0) this.currentIndex--;
+        },
+        Paginacao: () =>  {
+          this.currentIndex = actions.index;
+        },
 
-        if(soma > this.limitIndex){
+        SetIndex: () =>  {
+          var soma = this.currentIndex + actions.index;
+
+          if (soma > this.limitIndex) {
             this.currentIndex = this.limitIndex;
-        }
-        else if(soma < 0){
+          } else if (soma < 0) {
             this.currentIndex = 0;
-        }else{
+          } else {
             this.currentIndex = soma;
+          }
         }
+      };
+
+      const funcao = actionsChange[actions.action];
+
+      if (funcao) {
+        funcao();
       }
     },
 
@@ -119,7 +128,7 @@ export default {
 
         var margin = this.marginDrag < 0 ? -this.marginDrag : this.marginDrag;
         var index = parseInt(margin / this.singleWidth);
-        
+
         //pega a porcentagem de quanto a outra imagem foi vista
         if ((margin % this.singleWidth) / (this.singleWidth / 100) > 50) {
           index++;
@@ -129,7 +138,7 @@ export default {
           index = -index;
         }
 
-        this.changeIndex({ action: "setIndex", index });
+        this.changeIndex({ action: "SetIndex", index });
 
         this.marginDrag = 0;
       }
@@ -150,7 +159,7 @@ export default {
 
 .slides-inner {
   display: flex;
-  transition: 0.3s
+  transition: 0.3s;
 }
 
 .selector {
