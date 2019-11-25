@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       images: [],
-      pesquisa: "cars",
+      pesquisa: "tree",
     };
   },
 

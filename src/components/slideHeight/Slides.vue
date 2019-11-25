@@ -1,18 +1,25 @@
 <template>
   <div ref="slides" class="slides">
-    <div
-      ref="slides-inner"
-      class="slides-inner selector"
-      :class="{'transition' : position == 0}"
-      :style="{height: `300px`, marginLeft: `-${slidesInnerMarginLeft + marginDrag}px`}"
-    >
-      <div class="slide" :key="index" v-for="(item, index) in images">
-        <Slide style="height: 300px" :slide="item" @setWidth="item.width = $event"/>
-        Width: {{item.width}}
+    <Zoom @zoomOff="zoomOff = $event">
+      <div
+        ref="slides-inner"
+        class="slides-inner selector"
+        :class="{'transition' : position == 0}"
+        :style="{height: `500px`, marginLeft: `-${slidesInnerMarginLeft + marginDrag}px`}"
+      >
+        <div class="slide" :key="index" v-for="(item, index) in images">
+          <Slide style="height: 500px" :slide="item" @setWidth="item.width = $event" />
+          Width: {{item.width}}
+        </div>
       </div>
-    </div>
+    </Zoom>
 
-    <Navigation :images="images" :limitIndex="limitIndex" @changeIndex="changeIndex($event)" style="margin-top: 35px;"/>
+    <Navigation
+      :images="images"
+      :limitIndex="limitIndex"
+      @changeIndex="changeIndex($event)"
+      style="margin-top: 35px;"
+    />
     {{position}}
     <br />
     {{currentIndex}}
@@ -22,11 +29,13 @@
 <script>
 import Slide from "./Slide.vue";
 import Navigation from "../Navigation.vue";
+import Zoom from "../zoom.vue";
 
 export default {
   components: {
     Slide,
-    Navigation
+    Navigation,
+    Zoom
   },
 
   props: {
@@ -52,7 +61,7 @@ export default {
 
       marginDrag: 0,
 
-      baseWidth: 0,
+      zoomOff: true,
     };
   },
 
@@ -62,7 +71,7 @@ export default {
 
       for (let index = 0; index < this.currentIndex; index++) {
         const element = this.images[index];
-        width += element.width; 
+        width += element.width;
       }
 
       return width;
@@ -131,7 +140,7 @@ export default {
     },
 
     setLimitIndex() {
-      this.limitIndex = this.images.length - this.itensPerSlide;
+      this.limitIndex = this.images.length - 2;
     },
 
     arrastador(e) {
@@ -142,7 +151,10 @@ export default {
     },
 
     dragStart(e) {
-      this.position = this.getPosition(e);
+      debugger;
+      if(this.zoomOff){
+        this.position = this.getPosition(e);
+      }
     },
 
     dragEnd() {
@@ -165,12 +177,12 @@ export default {
 
         this.marginDrag = 0;
       }
-    }, 
+    },
 
-    getPosition(e){
+    getPosition(e) {
       if ("ontouchstart" in window) {
         return e.touches[0].clientX;
-      }else{
+      } else {
         return e.pageX;
       }
     }

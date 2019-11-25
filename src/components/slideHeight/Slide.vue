@@ -1,7 +1,7 @@
 <template>
   <div ref="div" class="divImg">
     <div style="padding-right: 5px;padding-left: 5px;" class="divImg">
-      <img ref="img" :src="slide.urls.regular" class="img selector" draggable="false"/>
+      <img ref="img" :src="slide.urls.regular" class="img selector" draggable="false" />
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
     return {};
   },
 
-  mounted(){
+  mounted() {
     var img = this.$refs.img;
     var div = this.$refs.div;
 
@@ -24,7 +24,7 @@ export default {
       img.addEventListener("load", () => {
         var width = div.offsetWidth;
 
-        this.$emit('setWidth', width);
+        this.$emit("setWidth", width);
       });
     }
   }
