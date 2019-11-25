@@ -4,14 +4,15 @@
       ref="slides-inner"
       class="slides-inner selector"
       :class="{'transition' : position == 0}"
-      :style="{width: `${innerWidth}px`, marginLeft: `-${slidesInnerMarginLeft + marginDrag}px`}"
+      :style="{height: `300px`, marginLeft: `-${slidesInnerMarginLeft + marginDrag}px`}"
     >
       <div class="slide" :key="index" v-for="(item, index) in images">
-        <Slide :style="{width: singleWidth + 'px'}" :slide="item" />
+        <Slide style="height: 300px" :slide="item" @setWidth="item.width = $event"/>
+        Width: {{item.width}}
       </div>
     </div>
 
-    <Navigation :images="images" :limitIndex="limitIndex" @changeIndex="changeIndex($event)" />
+    <Navigation :images="images" :limitIndex="limitIndex" @changeIndex="changeIndex($event)" style="margin-top: 35px;"/>
     {{position}}
     <br />
     {{currentIndex}}
@@ -20,7 +21,7 @@
 
 <script>
 import Slide from "./Slide.vue";
-import Navigation from "./Navigation.vue";
+import Navigation from "../Navigation.vue";
 
 export default {
   components: {
@@ -49,13 +50,24 @@ export default {
       limitIndex: 0,
       position: 0,
 
-      marginDrag: 0
+      marginDrag: 0,
+
+      baseWidth: 0,
     };
   },
 
   computed: {
     slidesInnerMarginLeft() {
-      return this.currentIndex * this.singleWidth;
+      debugger;
+      var width = 0;
+
+      for (let index = 0; index < this.currentIndex; index++) {
+        debugger;
+        const element = this.images[index];
+        width += element.width; 
+      }
+
+      return width;
     }
   },
 

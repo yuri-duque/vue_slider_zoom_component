@@ -1,20 +1,23 @@
 <template>
   <div id="app">
     <input type="text" v-model="pesquisa" style="margin-bottom: 15px;"/>
-    <button @click="getImages(pesquisa)">Pesquisar</button>
-    <Slides :images="images" :itensPerSlide="4" />
+    <button @click="search(pesquisa)">Pesquisar</button>
+    <SlidesH :images="images" :itensPerSlide="4"  style="margin-bottom: 30px;"/>
+    <Slides :images="images" :itensPerSlide="4"  style="margin-top: 30px;"/>
   </div>
 </template>
 
 <script>
 import unsplash from "./api/unsplash";
 
-import Slides from "./components/Slides.vue";
+import Slides from "./components/slideWidth/Slides.vue";
+import SlidesH from "./components/slideHeight/Slides.vue";
 
 export default {
   name: "app",
   components: {
-    Slides
+    Slides,
+    SlidesH
   },
 
   data() {
@@ -29,7 +32,12 @@ export default {
   },
 
   methods: {
+    async search(term){
+      this.images = await this.getImages(term);
+    },
+
     getImages: async term => {
+      debugger;
       const response = await unsplash.get("search/photos", {
         params: { query: term }
       });
