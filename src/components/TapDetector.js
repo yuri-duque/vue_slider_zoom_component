@@ -37,7 +37,7 @@ function TapDetector () {
   
     this.attach = function (dom) {
       if (!(dom instanceof Element)) {
-        console.error('TapDetector.attach: arg must be an Element')
+        // console.error('TapDetector.attach: arg must be an Element')
         return
       }
       dom.addEventListener('touchstart', onTouchStart)
