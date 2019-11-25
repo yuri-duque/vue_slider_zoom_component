@@ -188,17 +188,19 @@ export default {
 
       // translate
       if (this.limitTranslation) {
-        if(this.scale == this.minScale){
-            this.$emit("zoomOff", true);
-        }else{
-            this.$emit("zoomOff", false);
+        if (this.scale == this.minScale) {
+          this.$emit("zoomOff", true);
+        } else {
+          this.$emit("zoomOff", false);
         }
         let translateLimit = this.calcTranslateLimit();
+        console.log(this.translateX);
+        console.log(translateLimit.x);
         if (Math.abs(this.translateX) > translateLimit.x) {
-          //   this.translateX *= translateLimit.x / Math.abs(this.translateX);
+            this.translateX *= translateLimit.x / Math.abs(this.translateX);
         }
         if (Math.abs(this.translateY) > translateLimit.y) {
-          //   this.translateY *= translateLimit.y / Math.abs(this.translateY);
+            this.translateY *= translateLimit.y / Math.abs(this.translateY);
         }
       }
     },

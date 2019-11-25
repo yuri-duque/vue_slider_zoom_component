@@ -151,7 +151,6 @@ export default {
     },
 
     dragStart(e) {
-      debugger;
       if(this.zoomOff){
         this.position = this.getPosition(e);
       }
