@@ -1,6 +1,6 @@
 <template>
   <div ref="slides" class="slides">
-    <Zoom @zoomOff="zoomOff = $event">
+    <Zoom @zoomOff="zoomOff = $event" :defaultWidth="defaultWidth">
       <div
         ref="slides-inner"
         class="slides-inner selector"
@@ -9,7 +9,6 @@
       >
         <div class="slide" :key="index" v-for="(item, index) in images">
           <Slide style="height: 500px" :slide="item" @setWidth="item.width = $event" />
-          Width: {{item.width}}
         </div>
       </div>
     </Zoom>
@@ -62,6 +61,7 @@ export default {
       marginDrag: 0,
 
       zoomOff: true,
+      defaultWidth: 0,
     };
   },
 
@@ -140,7 +140,18 @@ export default {
     },
 
     setLimitIndex() {
-      this.limitIndex = this.images.length - 2;
+      var mainDiv = this.$refs.slides;
+      this.defaultWidth = mainDiv.clientWidth;
+
+      // var maxWidth = 0;
+      // for (let index = 0; index < this.images.length; index++) {
+      //   const element = this.images[index];
+      //   maxWidth += element.width;
+      // }
+
+      // var index = parseInt(maxWidth / defaultWidth);
+
+      this.limitIndex = this.images.length -1;
     },
 
     arrastador(e) {
