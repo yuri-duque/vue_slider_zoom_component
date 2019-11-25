@@ -22,6 +22,20 @@
     {{position}}
     <br />
     {{currentIndex}}
+
+
+    <MyZoom style="height: 500px">
+      <div
+        ref="slides-inner"
+        class="slides-inner selector"
+        :class="{'transition' : position == 0}"
+        :style="{height: `500px`, marginLeft: `${center +( -1 * ( slidesInnerMarginLeft + marginDrag))}px`}"
+      >
+        <div class="slide" :key="index" v-for="(item, index) in images">
+          <Slide style="height: 500px" :slide="item" @setWidth="setImageWidth($event, index)" />
+        </div>
+      </div>
+    </MyZoom>
   </div>
 </template>
 
@@ -29,12 +43,14 @@
 import Slide from "./Slide.vue";
 import Navigation from "../Navigation.vue";
 import Zoom from "../zoom.vue";
+import MyZoom from "../myZoom.vue";
 
 export default {
   components: {
     Slide,
     Navigation,
-    Zoom
+    Zoom,
+    MyZoom
   },
 
   props: {
@@ -62,7 +78,7 @@ export default {
       marginDrag: 0,
 
       zoomOff: true,
-      defaultWidth: 0,
+      defaultWidth: 0
     };
   },
 
@@ -103,7 +119,7 @@ export default {
       this.setCenter();
     },
 
-    currentIndex(){
+    currentIndex() {
       this.setCenter();
     }
   },
@@ -114,21 +130,23 @@ export default {
       this.innerWidth = this.singleWidth * this.images.length;
     },
 
-    setImageWidth(width, index){
+    setImageWidth(width, index) {
       this.images[index].width = width;
 
-      if(index == this.currentIndex){
-        this.setCenter(width)
+      if (index == this.currentIndex) {
+        this.setCenter(width);
       }
     },
 
-    setCenter(){
+    setCenter() {
       this.center = 0;
 
-      var clientWidth = this.$refs.slides.clientWidth;
-      var imageWidth = this.images[this.currentIndex].width;
+      if (this.currentIndex != 0) {
+        var clientWidth = this.$refs.slides.clientWidth;
+        var imageWidth = this.images[this.currentIndex].width;
 
-      this.center = (clientWidth - imageWidth) / 2;
+        this.center = (clientWidth - imageWidth) / 2;
+      }
     },
 
     changeIndex(actions) {
@@ -166,7 +184,7 @@ export default {
       var mainDiv = this.$refs.slides;
       this.defaultWidth = mainDiv.clientWidth;
 
-      this.limitIndex = this.images.length -1;
+      this.limitIndex = this.images.length - 1;
     },
 
     arrastador(e) {
@@ -177,7 +195,7 @@ export default {
     },
 
     dragStart(e) {
-      if(this.zoomOff){
+      if (this.zoomOff) {
         this.position = this.getPosition(e);
       }
     },
