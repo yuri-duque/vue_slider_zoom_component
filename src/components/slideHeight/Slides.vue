@@ -123,7 +123,6 @@ export default {
     },
 
     setCenter(){
-      debugger;
       this.center = 0;
 
       var clientWidth = this.$refs.slides.clientWidth;
