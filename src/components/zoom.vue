@@ -89,10 +89,6 @@ export default {
       }
     },
     resetTrigger: "reset",
-
-    maxWidth() {
-      // console.log(this.maxWidth);
-    }
   },
 
   mounted() {
@@ -101,7 +97,6 @@ export default {
     if (this.doubleClickToZoom) {
       this.tapDetector.onDoubleTap(this.onDoubleTap);
     }
-    // console.log('container size: ', this.containerWidth, this.containerHeight)
     window.addEventListener("resize", this.onWindowResize);
     this.onWindowResize();
     this.refreshContainerPos();
@@ -112,13 +107,11 @@ export default {
     this.tapDetector.detach(this.$el);
     window.removeEventListener("resize", this.onWindowResize);
     window.cancelAnimationFrame(this.raf);
-    // console.log('destroy')
   },
 
   methods: {
     // API ---------------------------------------------------------------------
     reset() {
-      console.log("reset");
       this.scale = 1;
       this.panLocked = true;
       this.translateX = 0;
@@ -126,12 +119,10 @@ export default {
     },
 
     zoomIn(scale = 2) {
-      console.log("zoomIn");
       this.tryToScale(scale);
       this.onInteractionEnd();
     },
     zoomOut(scale = 0.5) {
-      console.log("zoomOut");
       this.tryToScale(scale);
       this.onInteractionEnd();
     },
@@ -140,7 +131,6 @@ export default {
     // Zoom the image with the point at the pointer(mouse or pinch center) pinned.
     // Simplify: This can be regard as vector pointer to old-image-center scaling.
     tryToScale(scaleDelta) {
-      console.log("tryToScale");
       let newScale = this.scale * scaleDelta;
       // damping
       if (newScale < this.minScale || newScale > this.maxScale) {
@@ -168,18 +158,15 @@ export default {
     },
 
     setPointerPosCenter() {
-      console.log("setPointerPosCenter");
       this.pointerPosX = this.containerLeft + this.containerWidth / 2;
       this.pointerPosY = this.containerTop + this.containerHeight / 2;
     },
 
     // pan
     onPointerMove(newMousePosX, newMousePosY) {
-      //   console.log("onPointerMove");
       if (this.isPointerDown) {
         let pixelDeltaX = newMousePosX - this.pointerPosX;
         let pixelDeltaY = newMousePosY - this.pointerPosY;
-        // console.log('pixelDeltaX, pixelDeltaY', pixelDeltaX, pixelDeltaY)
         if (!this.panLocked) {
           this.translateX += pixelDeltaX / this.containerWidth;
           this.translateY += pixelDeltaY / this.containerHeight;
@@ -190,7 +177,6 @@ export default {
     },
 
     onInteractionEnd: _debounce(function() {
-      console.log("_debounce");
       this.limit();
       this.panLocked = this.scale === 1;
       //   this.$emit('update:zoomed', !this.panLocked)
@@ -198,7 +184,6 @@ export default {
 
     // limit the scale between max and min and the translate within the viewport
     limit() {
-      console.log("limit");
       // scale
       if (this.scale < this.minScale) {
         this.$emit("zoomOff", true);
@@ -227,7 +212,6 @@ export default {
     },
 
     calcTranslateLimit() {
-      console.log("calcTranslateLimit");
         let imageToContainerRatio =
           this.containerWidth / this.aspectRatio / this.containerHeight;
         let translateLimitY = (this.scale * imageToContainerRatio - 1) / 2;
@@ -249,13 +233,11 @@ export default {
     },
 
     getMarginDirection() {
-      console.log("getMarginDirection");
       let containerRatio = this.containerWidth / this.containerHeight;
       return containerRatio > this.aspectRatio ? "x" : "y";
     },
 
     onDoubleTap(ev) {
-      console.log("onDoubleTap");
       if (this.scale === 1) {
         if (ev.clientX > 0) {
           this.pointerPosX = ev.clientX;
@@ -270,7 +252,6 @@ export default {
 
     // reactive
     onWindowResize() {
-      console.log("onWindowResize");
       let styles = window.getComputedStyle(this.$refs.slot);
       this.containerWidth = parseFloat(styles.width);
       //   this.containerWidth = this.defaultWidth;
@@ -280,7 +261,6 @@ export default {
     },
 
     refreshContainerPos() {
-      console.log("refreshContainerPos");
       let rect = this.$el.getBoundingClientRect();
       this.containerLeft = rect.left;
       this.containerTop = rect.top;
@@ -290,12 +270,10 @@ export default {
       this.animTranslateX = this.gainOn(this.animTranslateX, this.translateX);
       this.animTranslateY = this.gainOn(this.animTranslateY, this.translateY);
       this.raf = window.requestAnimationFrame(this.loop);
-      // console.log('loop', this.raf)
     },
 
     gainOn(from, to) {
       let delta = (to - from) * 0.3;
-      // console.log('gainOn', from, to, from + delta)
       if (Math.abs(delta) > 1e-5) {
         return from + delta;
       } else {
@@ -305,7 +283,6 @@ export default {
     // Mouse Events ------------------------------------------------------------
     // Mouse wheel scroll,  TrackPad pinch or TrackPad scroll
     onMouseWheel(ev) {
-      //   console.log("onMouseWheel");
       if (ev.detail) ev.wheelDelta = ev.detail * -10;
       let currTime = Date.now();
       if (Math.abs(ev.wheelDelta) === 120) {
@@ -334,35 +311,28 @@ export default {
       this.lastWheelTime = currTime;
     },
     onMouseWheelDo(wheelDelta) {
-      //   console.log("onMouseWheelDo");
       // Value basis: One mouse wheel (wheelDelta=+-120) means 1.25/0.8 scale.
       let scaleDelta = Math.pow(1.25, wheelDelta / 120);
       this.tryToScale(scaleDelta);
       this.onInteractionEnd();
     },
     onMouseDown(ev) {
-      //   console.log("onMouseDown");
       this.refreshContainerPos();
       this.isPointerDown = true;
       // Open the context menu then click other place will skip the mousemove events.
       // This will cause the pointerPosX/Y NOT sync, then we will need to fix it on mousedown event.
       this.pointerPosX = ev.clientX;
       this.pointerPosY = ev.clientY;
-      // console.log('onMouseDown', ev)
     },
     onMouseUp() {
-      //   console.log("onMouseUp");
       this.isPointerDown = false;
       this.onInteractionEnd();
     },
     onMouseMove(ev) {
-      //   console.log("onMouseMove");
       this.onPointerMove(ev.clientX, ev.clientY);
-      // console.log('onMouseMove client, offset', ev.clientX, ev.clientY)
     },
     // Touch Events ------------------------------------------------------------
     onTouchStart(ev) {
-      //   console.log("onTouchStart");
       if (ev.touches.length === 1) {
         this.refreshContainerPos();
         this.pointerPosX = ev.touches[0].clientX;
@@ -378,10 +348,8 @@ export default {
         let distY = ev.touches[0].clientY - ev.touches[1].clientY;
         this.twoFingerInitDist = Math.sqrt(distX * distX + distY * distY);
       }
-      // console.log('onTouchStart', ev.touches)
     },
     onTouchEnd(ev) {
-      //   console.log("onTouchEnd");
       if (ev.touches.length === 0) {
         this.isPointerDown = false;
         // Near 1 to set 1
@@ -391,10 +359,8 @@ export default {
         this.pointerPosX = ev.touches[0].clientX;
         this.pointerPosY = ev.touches[0].clientY;
       }
-      // console.log('onTouchEnd', ev.touches.length)
     },
     onTouchMove(ev) {
-      //   console.log("onTouchMove");
       if (ev.touches.length === 1) {
         this.onPointerMove(ev.touches[0].clientX, ev.touches[0].clientY);
       } else if (ev.touches.length === 2) {
@@ -411,7 +377,6 @@ export default {
         this.tryToScale(newTwoFingerDist / this.twoFingerInitDist);
         this.twoFingerInitDist = newTwoFingerDist;
       }
-      // console.log('onTouchMove', this.pointerPosX, this.pointerPosY)
     }
   }
 };

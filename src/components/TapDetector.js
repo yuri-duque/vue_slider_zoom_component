@@ -70,19 +70,16 @@ function TapDetector () {
   
     function onTouchStart (ev) {
       isTouchMode = true
-      // console.log('onTouchStart')
       if (ev.touches.length === 1) {
         onPointerDown(ev.touches[0].clientX, ev.touches[0].clientY)
       }
     }
     function onTouchEnd (ev) {
-      // console.log('onTouchEnd')
       if (ev.touches.length === 0) {
         onPointerUp()
       }
     }
     function onTouchMove (ev) {
-      // console.log('onTouchMove', ev)
       if (ev.touches.length === 1) {
         onPointerMove(ev.touches[0].clientX, ev.touches[0].clientY)
       }
@@ -91,19 +88,16 @@ function TapDetector () {
     function onMouseDown (ev) {
       if (isTouchMode) return
   
-      // console.log('onMouseDown')
       onPointerDown(ev.clientX, ev.clientY)
     }
     function onMouseUp () {
       if (isTouchMode) return
-  
-      // console.log('onMouseUp')
+
       onPointerUp()
     }
     function onMouseMove (ev) {
       if (isTouchMode) return
   
-      // console.log('onMouseMove', ev)
       if (ev.button === 0) {
         onPointerMove(ev.clientX, ev.clientY)
       }
@@ -116,7 +110,6 @@ function TapDetector () {
     }
     function onPointerUp () {
       let currTimeStamp = Date.now()
-      // console.log('touchMovedLength', touchMovedLength)
       if (touchMovedLength < 10) {
         // Only when no sliding two far is considered as a valid tap
         if (currTimeStamp - lastTapTimestamp < 300) {
@@ -125,7 +118,6 @@ function TapDetector () {
           tappedCount = 1
         }
         lastTapTimestamp = Date.now()
-        // console.log('tappedCount', tappedCount)
         triggerCallbacks(singleTapCallbacks, {
           clientX: lastPointerX,
           clientY: lastPointerY,
@@ -144,7 +136,6 @@ function TapDetector () {
       let deltaX = lastPointerX - x
       let deltaY = lastPointerY - y
       let length = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-      // console.log('onTouchMove length', length)
       touchMovedLength += length
       lastPointerX = x
       lastPointerY = y
