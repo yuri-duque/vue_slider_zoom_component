@@ -2,22 +2,19 @@
   <div id="app">
     <input type="text" v-model="pesquisa" style="margin-bottom: 15px;"/>
     <button @click="search(pesquisa)">Pesquisar</button>
-    <SlidesH :images="images" :itensPerSlide="4"  style="margin-bottom: 30px;"/>
-    <Slides :images="images" :itensPerSlide="4"  style="margin-top: 30px;"/>
+    <Slides :images="images" :itensPerSlide="4"  style="margin-bottom: 30px;"/>
   </div>
 </template>
 
 <script>
 import unsplash from "./api/unsplash";
 
-import Slides from "./components/slideWidth/Slides.vue";
-import SlidesH from "./components/slideHeight/Slides.vue";
+import Slides from "./components/slide/Slides.vue";
 
 export default {
   name: "app",
   components: {
-    Slides,
-    SlidesH
+    Slides
   },
 
   data() {
