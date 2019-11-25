@@ -1,19 +1,4 @@
-/**
- * Detect double tap events
- * # Deals with:
- * - Time intervals between taps
- * - Swipe will stop the taps
- * # Usage:
- * let tapDetector = new TapDetector()
- * tapDetector.attach(this.$el) // in mounted
- * tapDetector.detach(this.$el) // in destroy
- * tapDetector.onSingle(callback)
- * tapDetector.onDouble(callback)
- */
-
 function TapDetector () {
-
-    // Callbacks -----------------------------------------------------------------
   
     let singleTapCallbacks = []
     let doubleTapCallbacks = []

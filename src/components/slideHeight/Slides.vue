@@ -5,10 +5,10 @@
         ref="slides-inner"
         class="slides-inner selector"
         :class="{'transition' : position == 0}"
-        :style="{height: `500px`, marginLeft: `-${slidesInnerMarginLeft + marginDrag}px`}"
+        :style="{height: `500px`, marginLeft: `${center +( -1 * ( slidesInnerMarginLeft + marginDrag))}px`}"
       >
         <div class="slide" :key="index" v-for="(item, index) in images">
-          <Slide style="height: 500px" :slide="item" @setWidth="item.width = $event" />
+          <Slide style="height: 500px" :slide="item" @setWidth="setImageWidth($event, index)" />
         </div>
       </div>
     </Zoom>
@@ -53,6 +53,7 @@ export default {
     return {
       innerWidth: 0,
       singleWidth: 0,
+      center: 0,
       currentIndex: 0,
 
       limitIndex: 0,
@@ -99,6 +100,11 @@ export default {
   watch: {
     images() {
       this.setLimitIndex();
+      this.setCenter();
+    },
+
+    currentIndex(){
+      this.setCenter();
     }
   },
 
@@ -106,6 +112,24 @@ export default {
     setSize() {
       this.singleWidth = this.$refs.slides.clientWidth / this.itensPerSlide;
       this.innerWidth = this.singleWidth * this.images.length;
+    },
+
+    setImageWidth(width, index){
+      this.images[index].width = width;
+
+      if(index == this.currentIndex){
+        this.setCenter(width)
+      }
+    },
+
+    setCenter(){
+      debugger;
+      this.center = 0;
+
+      var clientWidth = this.$refs.slides.clientWidth;
+      var imageWidth = this.images[this.currentIndex].width;
+
+      this.center = (clientWidth - imageWidth) / 2;
     },
 
     changeIndex(actions) {
@@ -142,14 +166,6 @@ export default {
     setLimitIndex() {
       var mainDiv = this.$refs.slides;
       this.defaultWidth = mainDiv.clientWidth;
-
-      // var maxWidth = 0;
-      // for (let index = 0; index < this.images.length; index++) {
-      //   const element = this.images[index];
-      //   maxWidth += element.width;
-      // }
-
-      // var index = parseInt(maxWidth / defaultWidth);
 
       this.limitIndex = this.images.length -1;
     },
