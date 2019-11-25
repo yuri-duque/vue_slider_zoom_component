@@ -37,7 +37,6 @@ export default {
     },
 
     getImages: async term => {
-      debugger;
       const response = await unsplash.get("search/photos", {
         params: { query: term }
       });

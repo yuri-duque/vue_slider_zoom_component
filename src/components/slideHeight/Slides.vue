@@ -58,11 +58,9 @@ export default {
 
   computed: {
     slidesInnerMarginLeft() {
-      debugger;
       var width = 0;
 
       for (let index = 0; index < this.currentIndex; index++) {
-        debugger;
         const element = this.images[index];
         width += element.width; 
       }
