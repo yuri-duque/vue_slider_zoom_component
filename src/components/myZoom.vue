@@ -6,7 +6,6 @@
       @mousewheel.prevent="onMouseWheel"
       @dblclick="doubleClick"
     >
-    {{transform}}
       <slot></slot>
     </div>
   </div>
@@ -18,6 +17,16 @@ export default {
     return {
       transform: 1
     };
+  },
+
+  watch:{
+      transform(){
+          if(this.transform == 1){
+              this.$emit("zoomOff", true);
+          }else{
+              this.$emit("zoomOff", false);
+          }
+      }
   },
 
   methods: {

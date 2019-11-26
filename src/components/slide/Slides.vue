@@ -22,20 +22,6 @@
     {{position}}
     <br />
     {{currentIndex}}
-
-
-    <MyZoom style="height: 500px">
-      <div
-        ref="slides-inner"
-        class="slides-inner selector"
-        :class="{'transition' : position == 0}"
-        :style="{height: `500px`, marginLeft: `${center +( -1 * ( slidesInnerMarginLeft + marginDrag))}px`}"
-      >
-        <div class="slide" :key="index" v-for="(item, index) in images">
-          <Slide style="height: 500px" :slide="item" @setWidth="setImageWidth($event, index)" />
-        </div>
-      </div>
-    </MyZoom>
   </div>
 </template>
 
@@ -43,14 +29,12 @@
 import Slide from "./Slide.vue";
 import Navigation from "../Navigation.vue";
 import Zoom from "../zoom.vue";
-import MyZoom from "../myZoom.vue";
 
 export default {
   components: {
     Slide,
     Navigation,
-    Zoom,
-    MyZoom
+    Zoom
   },
 
   props: {
