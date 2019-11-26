@@ -44,7 +44,6 @@ export default {
     },
 
     onMouseWheel(ev) {
-      console.log(ev.wheelDelta);
       if (ev.wheelDelta == 120) {
         this.setTransform("add", 0.3);
       } else if (ev.wheelDelta == -120) {
